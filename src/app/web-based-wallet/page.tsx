@@ -98,25 +98,29 @@ export default function Page() {
     }
 
     if (mn) {
+      // Validate user-provided mnemonic
       if (!validateMnemonic(mn)) {
         toast.error("Invalid recovery phrase. Please try again.");
         return;
       }
-    } else if (mnemonic) {
-      mn = mnemonic.join(" ");
-    }
-    else {
+    } else {
+      if (validateMnemonic(mnemonic.join(" "))) {
+        mn = mnemonic.join(" ");
+      }
       mn = generateMnemonic();
     }
 
+    // Split and save mnemonic words
     const words = mn.split(" ");
     setMnemonic(words);
 
-    const account = generateAccount(selectedPathType, words.join(" "), accounts.length);
+    // Generate account
+    const account = generateAccount(selectedPathType, mn, accounts.length);
     if (account) {
       const updatedAccounts = [...accounts, account];
       setAccounts(updatedAccounts);
 
+      // Save to localStorage
       localStorage.setItem("mnemonics", JSON.stringify(words));
       localStorage.setItem("accounts", JSON.stringify(updatedAccounts));
       localStorage.setItem("selectedPathType", selectedPathType);
@@ -125,6 +129,7 @@ export default function Page() {
       setMnemonicInput("");
     }
   }
+
 
   const fetchBalance = useCallback(async (account: Account) => {
     try {
