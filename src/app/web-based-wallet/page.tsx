@@ -43,7 +43,7 @@ export default function Page() {
   useEffect(() => {
     const recoveryPhrase = localStorage.getItem("mnemonics");
     if (recoveryPhrase) {
-      setMnemonic(recoveryPhrase.split(" "));
+      setMnemonic(JSON.parse(recoveryPhrase));
     }
 
     const accounts = JSON.parse(localStorage.getItem("accounts") || "[]");
