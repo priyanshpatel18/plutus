@@ -11,12 +11,6 @@ module.exports = {
 	darkMode: "class",
 	theme: {
 		extend: {
-			fontFamily: {
-				helvetica: ["var(--font-helvetica)", "sans-serif"],
-				avenir: ["var(--font-avenir)", "sans-serif"],
-				sfPro: ["var(--font-sf-pro)", "sans-serif"],
-				productSans: ["var(--font-product-sans)", "sans-serif"],
-			},
 			colors: {
 				background: "hsl(var(--background))",
 				foreground: "hsl(var(--foreground))",
@@ -73,6 +67,21 @@ module.exports = {
 				lg: "var(--radius)",
 				md: "calc(var(--radius) - 2px)",
 				sm: "calc(var(--radius) - 4px)",
+			},
+			animation: {
+				spotlight: "spotlight 2s ease .75s 1 forwards",
+			},
+			keyframes: {
+				spotlight: {
+					"0%": {
+						opacity: 0,
+						transform: "translate(-72%, -62%) scale(0.5)",
+					},
+					"100%": {
+						opacity: 1,
+						transform: "translate(-50%,-40%) scale(1)",
+					},
+				},
 			},
 		},
 	},

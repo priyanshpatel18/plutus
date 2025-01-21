@@ -9,7 +9,8 @@ import bs58 from "bs58";
 import { derivePath } from "ed25519-hd-key";
 import { ethers } from "ethers";
 import { motion } from 'framer-motion';
-import { Badge, CopyIcon, Trash } from "lucide-react";
+import { ArrowLeft, Badge, CopyIcon, Trash } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from 'react';
 import { toast } from "sonner";
 import nacl from "tweetnacl";
@@ -229,6 +230,8 @@ export default function Page() {
     };
   }, [accounts, fetchBalance]);
 
+  const router = useRouter();
+
   return (
     <div className="min-h-screen w-full py-8 sm:py-12 md:py-16 px-4 sm:px-6">
       <BackgroundBeams className="-z-50" />
@@ -240,16 +243,23 @@ export default function Page() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
       >
-        <div className="absolute -top-8 right-0 sm:top-4 sm:right-2 bg-green-300 text-green-900 text-xs p-1 font-medium rounded-lg select-none">
-          Test Network
-        </div>
         <motion.h1
-          className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-center px-4 flex items-start gap-2"
+          className="w-full text-2xl sm:text-3xl md:text-4xl font-extrabold px-4 flex items-center justify-between select-none"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.5 }}
         >
-          Wallet Creation & Account Management
+          <Button
+            variant={"secondary"}
+            size="icon"
+            onClick={() => router.push('/')}
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </Button>
+          <span>Wallet Creation & Account Management</span>
+          <div className="bg-green-300 text-green-900 text-xs p-1 font-medium rounded-lg select-none self-start">
+            Test Network
+          </div>
         </motion.h1>
 
         {accounts.length === 0 && !selectedPathType && (

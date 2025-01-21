@@ -1,4 +1,5 @@
 import { siteConfig } from "@/components/config/siteConfig";
+import Providers from "@/components/Providers";
 import { Toaster } from "@/components/ui/sonner";
 import { Ubuntu } from "next/font/google";
 import "./globals.css";
@@ -14,12 +15,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`bg-foreground text-background ${ubuntu.className} min-h-screen`}
-      >
-        {children}
-        <Toaster />
-      </body>
+      <Providers>
+        <body
+          className={`bg-foreground text-background ${ubuntu.className} min-h-screen`}
+        >
+          {children}
+          <Toaster />
+        </body>
+      </Providers>
     </html>
   );
 }
