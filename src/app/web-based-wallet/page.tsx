@@ -43,7 +43,7 @@ export default function Page() {
   useEffect(() => {
     const recoveryPhrase = localStorage.getItem("mnemonics");
     if (recoveryPhrase) {
-      setMnemonic(JSON.parse(recoveryPhrase));
+      setMnemonic(recoveryPhrase.split(" "));
     }
 
     const accounts = JSON.parse(localStorage.getItem("accounts") || "[]");
@@ -91,6 +91,8 @@ export default function Page() {
 
   function handleCreate() {
     let mn = mnemonicInput.trim();
+    console.log(mn);
+
 
     if (!selectedPathType) {
       toast.error("Please select a blockchain.");
@@ -106,8 +108,9 @@ export default function Page() {
     } else {
       if (validateMnemonic(mnemonic.join(" "))) {
         mn = mnemonic.join(" ");
+      } else {
+        mn = generateMnemonic();
       }
-      mn = generateMnemonic();
     }
 
     // Split and save mnemonic words
