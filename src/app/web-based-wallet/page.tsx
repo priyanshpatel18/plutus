@@ -236,7 +236,6 @@ export default function Page() {
     <div className="min-h-screen w-full py-8 sm:py-12 md:py-16 px-4 sm:px-6">
       <BackgroundBeams className="-z-50" />
 
-
       <motion.div
         className="max-w-5xl mx-auto flex flex-col gap-6 sm:gap-8 items-center relative"
         initial={{ opacity: 0 }}
@@ -256,8 +255,8 @@ export default function Page() {
           >
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <span>Wallet Creation & Account Management</span>
-          <div className="bg-green-300 text-green-900 text-xs p-1 font-medium rounded-lg select-none self-start">
+          <span>Wallet Creation</span>
+          <div className="bg-green-300 text-green-900 text-xs p-1 font-medium rounded-lg select-none lg:self-start">
             Test Network
           </div>
         </motion.h1>

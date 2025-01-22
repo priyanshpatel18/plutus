@@ -82,6 +82,14 @@ module.exports = {
 						transform: "translate(-50%,-40%) scale(1)",
 					},
 				},
+				shift: {
+					'0%': {
+						'background-position': '0 0, 0 0, 10px 10px, 20px 20px, 0 0',
+					},
+					'100%': {
+						'background-position': '50px 50px, -50px -50px, 60px 60px, 80px 80px, 0 0',
+					},
+				},
 			},
 		},
 	},
