@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { motion } from 'framer-motion';
-import { ArrowRight, Sparkles, Wallet, Shield, Laptop } from 'lucide-react';
+import { ArrowRight, Sparkles, Wallet, Shield, Laptop, ArrowUpCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function Page() {
@@ -101,6 +101,31 @@ export default function Page() {
                   className="w-full bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 group-hover:translate-y-[-2px] transition-all"
                 >
                   <span>Use Wallet Adapter</span>
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </motion.div>
+            </CardContent>
+          </Card>
+
+          <Card className="group hover:shadow-lg transition-all duration-300 bg-white/90 dark:bg-gray-800/90 border-0">
+            <CardContent className="p-6">
+              <motion.div
+                className="flex flex-col items-center space-y-4"
+                whileHover={{ scale: 1.02 }}
+              >
+                <div className="p-3 rounded-full bg-emerald-100 dark:bg-emerald-900/30">
+                  <ArrowUpCircle className="w-8 h-8 text-emerald-600 dark:text-emerald-400" />
+                </div>
+                <h2 className="text-xl font-semibold text-gray-800 dark:text-white">Token Transfer</h2>
+                <p className="text-sm text-gray-600 dark:text-gray-300 text-center">
+                  Easily send tokens from your wallet to others securely
+                </p>
+                <Button
+                  variant="default"
+                  onClick={() => router.push('/token-transfer')}
+                  className="w-full bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 group-hover:translate-y-[-2px] transition-all"
+                >
+                  <span>Start Transfer</span>
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </motion.div>

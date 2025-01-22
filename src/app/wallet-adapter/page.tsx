@@ -41,7 +41,7 @@ export default function Page() {
   return <MainContent />
 }
 function Main() {
-  const wallet = useWallet();
+  const { publicKey, connecting, signMessage, sendTransaction } = useWallet();
   const { connection } = useConnection();
   const router = useRouter();
   const [message, setMessage] = useState<string>("");
@@ -65,7 +65,7 @@ function Main() {
   }, [setTokenMap]);
 
   const getBalance = async () => {
-    if (!wallet.publicKey) {
+    if (!publicKey) {
       toast.error("Please connect your wallet first.");
       return;
     }
@@ -74,7 +74,7 @@ function Main() {
     setActiveLoading(1);
 
     try {
-      const data = await connection.getBalance(wallet.publicKey);
+      const data = await connection.getBalance(publicKey);
       toast.success(`Wallet has ${data / 10 ** 9} SOL`);
     } catch (error) {
       console.error(error);
@@ -87,11 +87,11 @@ function Main() {
 
   async function signMsg(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!wallet.publicKey) {
+    if (!publicKey) {
       toast.error("Please connect your wallet first.");
       return;
     }
-    if (!wallet.signMessage) {
+    if (!signMessage) {
       toast.error("The wallet does not support signing messages.");
       return;
     }
@@ -105,9 +105,9 @@ function Main() {
 
     try {
       const encodedMessage = new TextEncoder().encode(message);
-      const signature = await wallet.signMessage(encodedMessage);
+      const signature = await signMessage(encodedMessage);
 
-      if (!ed25519.verify(signature, encodedMessage, wallet.publicKey.toBytes())) {
+      if (!ed25519.verify(signature, encodedMessage, publicKey.toBytes())) {
         toast.error("Invalid signature.");
         return;
       }
@@ -127,7 +127,7 @@ function Main() {
 
   async function sendMoney(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!wallet.publicKey) {
+    if (!publicKey) {
       toast.error("Please connect your wallet first.");
       return;
     }
@@ -147,12 +147,12 @@ function Main() {
       const txn = new Transaction();
 
       txn.add(SystemProgram.transfer({
-        fromPubkey: wallet.publicKey,
+        fromPubkey: publicKey,
         toPubkey: new PublicKey(address),
         lamports: amount * 10 ** 9
       }))
 
-      const signature = await wallet.sendTransaction(txn, connection);
+      const signature = await sendTransaction(txn, connection);
       if (signature) {
         toast.success("Transaction successful.");
       } else {
@@ -174,7 +174,7 @@ function Main() {
   async function getAccountTokens() {
     setUserTokens([]);
 
-    if (!wallet.publicKey) {
+    if (!publicKey) {
       toast.error("Please connect your wallet first.");
       return;
     }
@@ -186,7 +186,7 @@ function Main() {
       const rpcEndpoint =
         "https://maximum-omniscient-mound.solana-devnet.quiknode.pro/f780d9c95e2b52873a0e208c1e2dcdfb20ca4eef";
       const solanaConnection = new Connection(rpcEndpoint);
-      const walletAddress = wallet.publicKey.toBase58();
+      const walletAddress = publicKey.toBase58();
 
       const filters: GetProgramAccountsFilter[] = [
         {
@@ -207,7 +207,7 @@ function Main() {
 
 
       if (accounts.length === 0) {
-        toast.info("No tokens found for this wallet.");
+        toast.info("No tokens found for this ");
         return;
       }
 
@@ -250,6 +250,7 @@ function Main() {
             toast.error("Failed to fetch token metadata.");
             return null;
           }
+          console.log(tokenMetadata.name);
 
           return {
             mint: tokenInfo.parsed.info.mint,
@@ -265,11 +266,11 @@ function Main() {
 
       tokens.unshift({
         mint: null,
-        owner: wallet.publicKey.toBase58(),
+        owner: publicKey.toBase58(),
         name: solana.name,
         symbol: solana.symbol,
         decimals: solana.decimals,
-        amount: await solanaConnection.getBalance(wallet.publicKey) / 10 ** 9,
+        amount: await solanaConnection.getBalance(publicKey) / 10 ** 9,
         image: solana.image
       });
 
@@ -278,7 +279,7 @@ function Main() {
       if (filteredTokens.length > 0) {
         toast.success("Tokens fetched successfully.");
       } else {
-        toast.info("No valid tokens found for this wallet.");
+        toast.info("No valid tokens found for this ");
       }
     } catch (error) {
       if (error instanceof Error)
@@ -326,7 +327,7 @@ function Main() {
             <Button
               variant="secondary"
               onClick={getBalance}
-              disabled={isLoading || activeLoading !== 0}
+              disabled={isLoading || activeLoading !== 0 || connecting}
             >
               {activeLoading === (1) && <Loader2 className="h-4 w-4 animate-spin" />}
               Check Balance
@@ -348,7 +349,7 @@ function Main() {
                 <Button
                   type="submit"
                   variant="default"
-                  disabled={isLoading || activeLoading !== 0}
+                  disabled={isLoading || activeLoading !== 0 || connecting}
                 >
                   {activeLoading === (2) && <Loader2 className="h-4 w-4 animate-spin" />}
                   Sign Message
@@ -379,7 +380,7 @@ function Main() {
                 <Button
                   variant="default"
                   type="submit"
-                  disabled={isLoading || activeLoading !== 0}
+                  disabled={isLoading || activeLoading !== 0 || connecting}
                 >
                   {activeLoading === (3) && <Loader2 className="h-4 w-4 animate-spin" />}
                   Send SOL
@@ -393,6 +394,7 @@ function Main() {
             getAccountTokens={getAccountTokens}
             loading={isLoading}
             activeLoading={activeLoading}
+            connecting={connecting}
           />
 
         </motion.div>
@@ -406,9 +408,10 @@ interface TokenDisplayProps {
   getAccountTokens: () => void;
   loading: boolean;
   activeLoading: number;
+  connecting: boolean;
 }
 
-function TokenDisplay({ userTokens, getAccountTokens, loading, activeLoading }: TokenDisplayProps) {
+function TokenDisplay({ userTokens, getAccountTokens, loading, activeLoading, connecting }: TokenDisplayProps) {
   return (
     <Card>
       <CardContent className="p-4 sm:p-6 space-y-4">
@@ -416,7 +419,7 @@ function TokenDisplay({ userTokens, getAccountTokens, loading, activeLoading }: 
           variant="default"
           onClick={getAccountTokens}
           className="w-full"
-          disabled={loading || activeLoading !== 0}
+          disabled={loading || activeLoading !== 0 || connecting}
         >
           {activeLoading === 4 && <Loader2 className="h-4 w-4 animate-spin" />}
           {userTokens.length > 0 ? "Refresh Tokens" : "Get Account Tokens"}
