@@ -7,8 +7,8 @@ import { Spotlight } from "@/components/ui/spotlight";
 import { createAssociatedTokenAccountInstruction, createTransferInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import { TokenInfo, TokenListProvider } from "@solana/spl-token-registry";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { Connection, GetProgramAccountsFilter, PublicKey, Transaction } from "@solana/web3.js";
-import { AnimatePresence, motion } from "framer-motion";
+import { Connection, GetProgramAccountsFilter, PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
+import { AnimatePresence, isGenerator, motion } from "framer-motion";
 import { AlertCircle, ArrowLeft, Coins, ExternalLink, SearchIcon, Wallet } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
@@ -35,7 +35,7 @@ export default function Page() {
 
 function Main() {
   const router = useRouter();
-  const { connected, publicKey, disconnecting, signTransaction } = useWallet();
+  const { connected, publicKey, disconnecting, signTransaction, sendTransaction } = useWallet();
   const { connection } = useConnection();
   const [tokenMap, setTokenMap] = useState<Map<string, TokenInfo>>(new Map());
   const [userTokens, setUserTokens] = useState<UserToken[]>([]);
@@ -202,6 +202,11 @@ function Main() {
       return;
     }
 
+    if (selectedToken?.name === "Solana") {
+      sendMoney();
+      return;
+    }
+
     try {
       const mintAddress = new PublicKey(selectedToken!.mint);
       const destinationWallet = new PublicKey(receiverAddress);
@@ -271,12 +276,58 @@ function Main() {
                 return token;
               });
             })
-            toast.success("Tokens sent successfully!");
+            toast.success("Transaction successful!");
           }
         }
       }
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to send tokens");
+    } finally {
+      setSelectedToken(null);
+      setIsLoading(false);
+      setAmount("");
+      setReceiverAddress("");
+    }
+  }
+
+  async function sendMoney() {
+    if (!publicKey) {
+      toast.error("Please connect your wallet first.");
+      return;
+    }
+    if (!receiverAddress) {
+      toast.error("Please enter an address to send money to.");
+      return;
+    }
+    if (!amount) {
+      toast.error("Please enter an amount to send.");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const txn = new Transaction();
+
+      txn.add(SystemProgram.transfer({
+        fromPubkey: publicKey,
+        toPubkey: new PublicKey(receiverAddress),
+        lamports: Number(amount) * 10 ** 9
+      }))
+
+      if (signTransaction) {
+        const signature = await sendTransaction(txn, connection);
+        if (signature) {
+          toast.success("Transaction successful.");
+        } else {
+          toast.error("Transaction failed.");
+        }
+      }
+    } catch (error) {
+      if (error instanceof Error)
+        toast.error(error.message);
+      else
+        toast.error("Transaction failed.");
     } finally {
       setSelectedToken(null);
       setIsLoading(false);
@@ -295,7 +346,7 @@ function Main() {
     if (userTokens) {
       interval = setInterval(() => {
         getAllTokens(false);
-      }, 10000);
+      }, 5000);
     }
 
     return () => {
@@ -304,7 +355,6 @@ function Main() {
       }
     };
   }, [connected, tokenMap, disconnecting, userTokens]);
-
 
   return (
     <div className="min-h-screen relative w-full py-6 sm:py-8 md:py-12 overflow-hidden">
