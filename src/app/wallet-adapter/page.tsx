@@ -184,7 +184,7 @@ function Main() {
 
     try {
       const rpcEndpoint =
-        "https://maximum-omniscient-mound.solana-devnet.quiknode.pro/f780d9c95e2b52873a0e208c1e2dcdfb20ca4eef";
+        `https://maximum-omniscient-mound.solana-devnet.quiknode.pro/${process.env.NEXT_PUBLIC_QUICKNODE_KEY}`;
       const solanaConnection = new Connection(rpcEndpoint);
       const walletAddress = publicKey.toBase58();
 
@@ -225,7 +225,7 @@ function Main() {
               image: token.logoURI,
             };
           } else {
-            const response = await fetch(`https://devnet.helius-rpc.com/?api-key=${process.env.NEXT_PUBLIC_HELIUS_KEY}`, {
+            const response = await fetch(`https://devnet.helius-rpc.com?api-key=${process.env.NEXT_PUBLIC_HELIUS_KEY}`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
