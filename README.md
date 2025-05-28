@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Plutus
+
+Plutus is a practice web-based wallet application built on the Solana blockchain. It provides essential wallet functionalities, including wallet adapter integration and token transfer capability.
+
+## Features
+
+- Web-based Solana wallet interface
+- Wallet adapter integration (Phantom, Solflare, etc.)
+- Token transfer functionality using Solana's Web3.js SDK
+- Practice-grade implementation for learning and experimentation
+
+## Technologies Used
+
+- React
+- Solana Web3.js
+- Wallet Adapter libraries
+- TailwindCSS (optional, if you used it for styling)
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js (v16 or later)
+- Yarn or npm
+
+### Installation
+
+```bash
+git clone https://github.com/your-username/plutus.git
+cd plutus
+npm install
+```
+
+### Running the App
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+or
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+yarn dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Build for Production
 
-## Learn More
+```bash
+npm run build
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Usage
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Connect your Solana wallet using the wallet adapter UI.
+2. View your wallet address and balance.
+3. Use the transfer UI to send SPL tokens to other wallet addresses.
+4. Sign and confirm transactions using your connected wallet.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+> Note: This is a practice app and not meant for production use. Use Devnet or Testnet to avoid real token loss.
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Disclaimer
+
+This project is for educational purposes only. Use it at your own risk. The author assumes no responsibility for any misuse or damages caused.
