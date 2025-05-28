@@ -26,15 +26,15 @@ Plutus is a practice web-based wallet application built on the Solana blockchain
 ### Installation
 
 ```bash
-git clone https://github.com/your-username/plutus.git
+git clone https://github.com/priyanshpatel18/plutus.git
 cd plutus
-npm install
+pnpm install
 ```
 
 ### Running the App
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 or
@@ -46,7 +46,7 @@ yarn dev
 ### Build for Production
 
 ```bash
-npm run build
+pnpm run build
 ```
 
 ## Usage
