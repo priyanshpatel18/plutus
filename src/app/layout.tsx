@@ -1,4 +1,4 @@
-import { siteConfig } from "@/components/config/siteConfig";
+import { siteConfig } from "@/config/siteConfig";
 import Providers from "@/components/Providers";
 import { Toaster } from "@/components/ui/sonner";
 import { Ubuntu } from "next/font/google";

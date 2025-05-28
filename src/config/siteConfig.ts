@@ -4,8 +4,8 @@ const { title, description, ogImage, baseURL } = {
   title: "PLUTUS",
   description:
     "PLUTUS is an automated crypto investment platform that helps users manage and grow their portfolios using blockchain technology and dollar-cost averaging (DCA). With real-time market updates, secure Solana blockchain transactions, and personalized investment strategies, PLUTUS offers a smarter, more efficient way to invest in cryptocurrencies.",
-  baseURL: "https://plutus.priyanshpatel.site",
-  ogImage: `https://plutus.priyanshpatel.site/open-graph.png`,
+  baseURL: "https://plutus.priyanshpatel.com",
+  ogImage: `https://plutus.priyanshpatel.com/open-graph.png`,
 };
 
 export const siteConfig: Metadata = {

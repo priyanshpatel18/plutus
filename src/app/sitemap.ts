@@ -2,7 +2,7 @@ import fs from "fs";
 import type { MetadataRoute } from "next";
 import path from "path";
 
-const URL = "https://plutus.priyanshpatel.site";
+const URL = "https://plutus.priyanshpatel.com";
 const baseDir = "src/app";
 const dynamicDirs = [""];
 const excludeDirs = [""];
